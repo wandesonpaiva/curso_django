@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Post
-from rest_framework import viewsets
-from .serializers import PostModelSerializer
+from .serializers import PostModelSerializer, AuthTokenSerializer
 from .forms import PostForm
+from rest_framework import viewsets
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 
 # Create your views here.
@@ -50,3 +52,8 @@ def post_edit(request, pk):
 class PostModelViewSet(viewsets.ModelViewSet):
 	serializer_class = PostModelSerializer
 	queryset = Post.objects.all().order_by('-published_date')
+
+
+class CreateTokenView(ObtainAuthToken):
+	serializer_class = AuthTokenSerializer
+	renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
